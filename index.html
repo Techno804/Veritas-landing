@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veritas — Ti teniamo aggiornato</title>
+    <meta name="description" content="Veritas sta arrivando. Lascia la tua email per ricevere gli aggiornamenti. Solo email, solo consenso, zero tracciamento." />
+    <style>
+      :root {
+        --navy: #1e3a8a;
+        --navy-deep: #07172a;
+        --bg: #030a15;
+        --teal: #0ea5a4;
+        --teal-light: #2dd4bf;
+        --text: #eaf3fb;
+        --text-dim: #9db4c9;
+        --card: rgba(255, 255, 255, 0.04);
+        --border: rgba(110, 170, 220, 0.18);
+        --radius: 18px;
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Sfondo con bagliori che richiamano il logo */
+      .glow {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .glow-1 { width: 480px; height: 480px; top: -140px; right: -120px; background: rgba(14, 165, 164, 0.13); }
+      .glow-2 { width: 380px; height: 380px; bottom: -100px; left: -140px; background: rgba(30, 58, 138, 0.35); }
+
+      /* Logo gigante sfocato che pulsa come un battito dietro il copy */
+      .bg-logo {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: min(62vw, 620px);
+        height: min(62vw, 620px);
+        z-index: 0;
+        pointer-events: none;
+        filter: blur(48px);
+        opacity: 0.6;
+        animation: heartbeat 2.1s ease-in-out infinite;
+        will-change: transform;
+      }
+      @keyframes heartbeat {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); }
+        12%      { transform: translate(-50%, -50%) scale(1.025); }
+        24%      { transform: translate(-50%, -50%) scale(1.005); }
+        36%      { transform: translate(-50%, -50%) scale(1.04); }
+        54%      { transform: translate(-50%, -50%) scale(1); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .bg-logo { animation: none; }
+      }
+
+      .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+      /* Header */
+      header { display: flex; align-items: center; justify-content: space-between; padding: 28px 0; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand svg { height: 44px; width: 44px; }
+      .brand-name {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--teal-light), var(--teal));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      nav a {
+        color: var(--text-dim);
+        text-decoration: none;
+        font-size: 14.5px;
+        margin-left: 24px;
+        transition: color 0.2s;
+      }
+      nav a:hover { color: var(--teal-light); }
+
+      /* Hero */
+      .hero { text-align: center; padding: 84px 0 56px; }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--teal-light);
+        background: rgba(14, 165, 164, 0.12);
+        border: 1px solid rgba(14, 165, 164, 0.35);
+        border-radius: 999px;
+        padding: 7px 16px;
+        margin-bottom: 26px;
+      }
+
+      /* Clessidra animata nel badge "In arrivo": bulbi curvi, sabbia che scorre fluida, giro ogni 5s */
+      .hg { display: block; }
+      .hg-spin   { transform-box: view-box; transform-origin: 12px 12px; animation: hg-flip 5s ease-in-out infinite; }
+      .hg-top    { transform-box: view-box; animation: hg-drain 5s linear infinite; }
+      .hg-bottom { transform-box: view-box; animation: hg-rise 5s linear infinite; }
+      .hg-stream { transform-box: view-box; transform-origin: 12px 11px; animation: hg-stream 5s linear infinite; }
+      @keyframes hg-flip {
+        0%, 76%   { transform: rotate(0deg); }
+        90%, 100% { transform: rotate(180deg); }
+      }
+      /* La camera alta si svuota: il livello della sabbia scende seguendo la forma del bulbo */
+      @keyframes hg-drain {
+        0%        { transform: translateY(0); }
+        76%, 100% { transform: translateY(8px); }
+      }
+      /* Il mucchietto in basso cresce dal fondo del bulbo */
+      @keyframes hg-rise {
+        0%        { transform: translateY(8px); }
+        76%, 100% { transform: translateY(0); }
+      }
+      /* Il filo di sabbia si accorcia man mano che il mucchio sale, con un leggero fremito fluido */
+      @keyframes hg-stream {
+        0%        { transform: scaleX(1)    scaleY(1);    opacity: 1; }
+        10%       { transform: scaleX(1.25) scaleY(0.9); }
+        20%       { transform: scaleX(0.85) scaleY(0.79); }
+        30%       { transform: scaleX(1.2)  scaleY(0.68); }
+        40%       { transform: scaleX(0.9)  scaleY(0.58); }
+        50%       { transform: scaleX(1.18) scaleY(0.47); }
+        60%       { transform: scaleX(0.88) scaleY(0.37); }
+        68%       { transform: scaleX(1.12) scaleY(0.28); }
+        74%       { transform: scaleX(1)    scaleY(0.22); opacity: 1; }
+        76%, 100% { transform: scaleX(1)    scaleY(0.22); opacity: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hg-spin, .hg-top, .hg-bottom, .hg-stream { animation: none; }
+        .hg-stream { display: none; }
+      }
+      h1 {
+        font-size: clamp(38px, 6vw, 62px);
+        font-weight: 800;
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        max-width: 720px;
+        margin: 0 auto 20px;
+      }
+      h1 span {
+        background: linear-gradient(120deg, var(--teal-light), var(--teal));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero p.lead {
+        font-size: 23px;
+        font-weight: 700;
+        color: var(--text-dim);
+        max-width: 640px;
+        margin: 0 auto 40px;
+      }
+
+      /* Form */
+      .signup {
+        max-width: 520px;
+        margin: 0 auto;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px;
+        backdrop-filter: blur(8px);
+      }
+      .field { display: flex; gap: 10px; }
+      .field input[type="email"] {
+        flex: 1;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(3, 9, 19, 0.7);
+        color: var(--text);
+        font-size: 15.5px;
+        font-family: var(--font);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .field input[type="email"]:focus { border-color: var(--teal); }
+      .field input::placeholder { color: #6b8299; }
+      .field input.ok, .field input.ok:focus { border-color: #4cbe82; }
+      .field input.err, .field input.err:focus { border-color: #e05252; }
+      .email-hint { margin-top: 10px; font-size: 13px; display: none; text-align: left; }
+      .email-hint.ok { display: block; color: #a9ecc5; }
+      .email-hint.err { display: block; color: #ffb3b3; }
+      .btn {
+        padding: 14px 22px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(120deg, var(--teal-light), var(--teal));
+        color: #04122e;
+        font-size: 15.5px;
+        font-weight: 700;
+        font-family: var(--font);
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+        white-space: nowrap;
+      }
+      .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(14, 165, 164, 0.35); }
+      .consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 16px;
+        font-size: 13.5px;
+        color: var(--text-dim);
+        text-align: left;
+      }
+      .consent input {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        accent-color: var(--teal);
+        flex-shrink: 0;
+      }
+      .consent a { color: var(--teal-light); }
+      .form-msg { margin-top: 14px; font-size: 14px; display: none; border-radius: 10px; padding: 12px 14px; text-align: left; }
+      .form-msg.error { display: block; background: rgba(224, 82, 82, 0.12); border: 1px solid rgba(224, 82, 82, 0.4); color: #ffb3b3; }
+      .form-msg.ok { display: block; background: rgba(76, 190, 130, 0.12); border: 1px solid rgba(76, 190, 130, 0.4); color: #a9ecc5; }
+      /* Honeypot anti-spam: invisibile agli utenti, visibile ai bot */
+      .hp { position: absolute; left: -9999px; opacity: 0; }
+      .privacy-note { margin-top: 14px; font-size: 12.5px; color: #7288a0; }
+
+      /* Sezione "Perché Veritas" */
+      .features { padding: 80px 0 64px; }
+      .features h2 { text-align: center; font-size: 61px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 12px; }
+      .features .sub { text-align: center; color: var(--text-dim); margin-bottom: 44px; font-size: 18px; font-weight: 700; }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+      .card {
+        background: rgba(30, 58, 138, 0.25);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 26px;
+      }
+      .card .icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(14, 165, 164, 0.14);
+        margin-bottom: 16px;
+      }
+      .card h3 { font-size: 17.5px; font-weight: 700; margin-bottom: 8px; }
+      .card p { font-size: 14.5px; color: var(--text-dim); }
+
+      /* Privacy */
+      .privacy { padding: 32px 0 72px; }
+      .privacy-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px 30px;
+      }
+      .privacy-box h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+      .privacy-box > p { color: var(--text-dim); font-size: 15px; margin-bottom: 16px; }
+      details summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--teal-light);
+        font-size: 15px;
+        user-select: none;
+      }
+      details[open] summary { margin-bottom: 12px; }
+      .privacy-box ul { margin: 0; padding-left: 20px; color: var(--text-dim); font-size: 14px; }
+      .privacy-box li { margin-bottom: 7px; }
+      .privacy-box strong { color: var(--text); font-weight: 600; }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 30px 0 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        text-align: center;
+      }
+      footer p { font-size: 13px; color: #7288a0; }
+
+      @media (max-width: 640px) {
+        .field { flex-direction: column; }
+        nav { display: none; }
+        .hero { padding-top: 48px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <!-- Logo gigante sfocato dietro il copy, con pulsazione a battito -->
+    <div class="bg-logo" aria-hidden="true">
+      <svg viewBox="0 0 720 720" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <linearGradient id="veritas-lg-bg">
+            <stop style="stop-color:#0ea5a4;stop-opacity:1;" offset="0.02631579" />
+            <stop style="stop-color:#1e3a8a;stop-opacity:1;" offset="0.57894737" />
+            <stop style="stop-color:#07172a;stop-opacity:1;" offset="1" />
+          </linearGradient>
+          <linearGradient xlink:href="#veritas-lg-bg" id="veritas-lg-use-bg" x1="-720" y1="360" x2="0" y2="360" gradientUnits="userSpaceOnUse" />
+        </defs>
+        <g transform="translate(-89.999992,-139.99998)">
+          <path
+            style="fill:url(#veritas-lg-use-bg);stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round"
+            d="m -720,120 v 160 a 120,120 45 0 0 120,120 h 160 c 66.27417,0 120,-53.72583 120,-120 V 120 A 120,120 45 0 0 -440,0 h -160 a 120,120 135 0 0 -120,120 z m 480,0 v 160 c 0,110.45695 -89.54305,200 -200,200 h -160 a 120,120 135 0 0 -120,120 120,120 45 0 0 120,120 h 480 A 120,120 135 0 0 0,600 V 120 A 120,120 45 0 0 -120,0 120,120 135 0 0 -240,120 Z"
+            transform="matrix(-0.55409711,0.55409711,0.55409711,0.55409711,51.050081,500)" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="wrap">
+      <header>
+        <div class="brand">
+          <!-- Logo ufficiale Veritas: originale .svg, sfondo trasparente, incorporato inline -->
+          <svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-label="Logo Veritas" role="img">
+            <defs>
+              <linearGradient id="veritas-lg">
+                <stop style="stop-color:#0ea5a4;stop-opacity:1;" offset="0.02631579" />
+                <stop style="stop-color:#1e3a8a;stop-opacity:1;" offset="0.57894737" />
+                <stop style="stop-color:#07172a;stop-opacity:1;" offset="1" />
+              </linearGradient>
+              <linearGradient xlink:href="#veritas-lg" id="veritas-lg-use" x1="-720" y1="360" x2="0" y2="360" gradientUnits="userSpaceOnUse" />
+            </defs>
+            <g transform="translate(-89.999992,-139.99998)">
+              <path
+                style="fill:url(#veritas-lg-use);stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round"
+                d="m -720,120 v 160 a 120,120 45 0 0 120,120 h 160 c 66.27417,0 120,-53.72583 120,-120 V 120 A 120,120 45 0 0 -440,0 h -160 a 120,120 135 0 0 -120,120 z m 480,0 v 160 c 0,110.45695 -89.54305,200 -200,200 h -160 a 120,120 135 0 0 -120,120 120,120 45 0 0 120,120 h 480 A 120,120 135 0 0 0,600 V 120 A 120,120 45 0 0 -120,0 120,120 135 0 0 -240,120 Z"
+                transform="matrix(-0.55409711,0.55409711,0.55409711,0.55409711,51.050081,500)" />
+            </g>
+          </svg>
+          <span class="brand-name">Veritas</span>
+        </div>
+        <nav>
+          <a href="#perche">Il progetto</a>
+          <a href="#privacy">Privacy</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <span class="eyebrow">
+          In arrivo
+          <svg class="hg" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <clipPath id="hg-bulb-top">
+                <path d="M5 3 H19 C19 7.2 14 8.9 12 11 C10 8.9 5 7.2 5 3 Z" />
+              </clipPath>
+              <clipPath id="hg-bulb-bottom">
+                <path d="M12 13 C14 15.1 19 16.8 19 21 H5 C5 16.8 10 15.1 12 13 Z" />
+              </clipPath>
+            </defs>
+            <g class="hg-spin">
+              <!-- Capsule in alto e in basso -->
+              <rect x="4.2" y="1.3" width="15.6" height="1.7" rx="0.85" fill="var(--teal-light)" />
+              <rect x="4.2" y="21" width="15.6" height="1.7" rx="0.85" fill="var(--teal-light)" />
+              <!-- Sabbia camera alta: scende seguendo la forma del bulbo -->
+              <g clip-path="url(#hg-bulb-top)">
+                <rect class="hg-top" x="4" y="3" width="16" height="8" fill="var(--teal-light)" />
+              </g>
+              <!-- Sabbia camera bassa: il mucchio cresce dal fondo -->
+              <g clip-path="url(#hg-bulb-bottom)">
+                <rect class="hg-bottom" x="4" y="13" width="16" height="8" fill="var(--teal-light)" />
+              </g>
+              <!-- Filo di sabbia che cade dal collo -->
+              <rect class="hg-stream" x="11.5" y="10.9" width="1" height="10" fill="var(--teal-light)" />
+              <!-- Vetro: due bulbi curvi sopra la sabbia -->
+              <path d="M5 3 H19 C19 7.2 14 8.9 12 11 C10 8.9 5 7.2 5 3 Z" stroke="var(--teal-light)" stroke-width="1.2" stroke-linejoin="round" fill="none" opacity="0.75" />
+              <path d="M12 13 C14 15.1 19 16.8 19 21 H5 C5 16.8 10 15.1 12 13 Z" stroke="var(--teal-light)" stroke-width="1.2" stroke-linejoin="round" fill="none" opacity="0.75" />
+            </g>
+          </svg>
+        </span>
+        <h1>La fiducia si costruisce.<br /><span>Il primo passo è insieme a te.</span></h1>
+        <p class="lead">
+          Veritas sta nascendo. Non rimanere indietro. Lasciaci la tua email e sii tra i primi
+          a vivere il nuovo modo di comunicare con Veritas. Perché la fiducia non si chiede, si costruisce.
+        </p>
+
+        <!--
+          INTEGRAZIONE EMAIL SERVICE (Brevo, MailerLite, Buttondown...):
+          1. Crea un form/lista nel tuo servizio email e copia qui l'endpoint:
+             <form action="https://TUO-ENDPOINT" method="post">
+          2. Il campo email deve chiamarsi come richiesto dal servizio (es. "EMAIL").
+          3. Abilita il DOUBLE OPT-IN nel pannello del servizio (obbligatorio per il consenso GDPR).
+          4. Il servizio registra automaticamente data/ora e testo del consenso (registro art. 7).
+          Fino a quel momento, la pagina simula l'invio lato client.
+        -->
+        <form class="signup" id="signup-form" novalidate>
+          <div class="field">
+            <input type="email" id="email" name="email" placeholder="latua@email.it" autocomplete="email" required />
+            <button type="submit" class="btn">Voglio essere aggiornato</button>
+          </div>
+          <p class="email-hint" id="email-hint" aria-live="polite"></p>
+          <label class="consent">
+            <input type="checkbox" id="consent" name="consent" required />
+            <span>
+              Acconsento a ricevere aggiornamenti su Veritas e confermo di aver letto la
+              <a href="#privacy">informativa privacy</a>. So che posso disdire quando voglio.
+            </span>
+          </label>
+          <!-- Honeypot anti-spam: da tenere vuoto -->
+          <input type="text" name="company_website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+          <p class="privacy-note">
+            🔒 Chiediamo solo la tua email. Nessun cookie di tracciamento, nessun profilo, nessuno spam.
+            Riceverai un'email di conferma prima di attivare gli aggiornamenti.
+          </p>
+        </form>
+      </section>
+
+      <section class="features" id="perche">
+        <h2>Cos'è Veritas</h2>
+        <p class="sub">Tre semplici promesse, fin dal primo giorno.</p>
+        <div class="cards">
+          <div class="card">
+            <div class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Credibilità</h3>
+            <p>La comunicazione scientifica deve essere attendibile e verificabile da chiunque, <strong>sempre</strong>. Da noi è già così, sui social <strong>no</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+            </div>
+            <h3>Accessibilità</h3>
+            <p>Il <strong>38%</strong> delle persone in Europa ritiene che gli scienziati non riescano a comunicare efficacemente il loro lavoro. Noi vogliamo portare quella percentuale a <strong>zero</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+            </div>
+            <h3>Meritocrazia</h3>
+            <p>Un contenuto di qualità richiede ricerca e conoscenze. Noi premiamo l'<strong>impegno</strong>, non le copertine clickbait.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="privacy" id="privacy">
+        <div class="privacy-box">
+          <h2>Ah già... teniamo anche alla tua privacy</h2>
+          <p>
+            Su questa pagina raccogliamo solo un dato: la tua email. La usiamo per una cosa sola:
+            mandarti gli aggiornamenti su Veritas. Niente di più, zero dati venduti. Incredibile, vero?
+            Qui sotto i dettagli completi.
+          </p>
+          <details>
+            <summary>Informativa privacy (art. 13 GDPR) — leggi tutto</summary>
+            <ul>
+              <li><strong>Titolare del trattamento:</strong> Veritas (veritasproject@gmail.com).</li>
+              <li><strong>Dati trattati:</strong> esclusivamente l'indirizzo email fornito volontariamente.</li>
+              <li><strong>Finalità:</strong> invio di aggiornamenti e comunicazioni relative al progetto Veritas.</li>
+              <li><strong>Base giuridica:</strong> consenso esplicito dell'interessato (art. 6.1.a GDPR), revocabile in ogni momento.</li>
+              <li><strong>Durata della conservazione:</strong> fino alla revoca del consenso o alla cancellazione dell'iscrizione.</li>
+              <li><strong>Comunicazione a terzi:</strong> l'email è custodita da un fornitore di email marketing con server nell'UE che tratta i dati per nostro conto (art. 28 GDPR), senza usi propri.</li>
+              <li><strong>Cookie e tracciamento:</strong> questa pagina non usa cookie di profilazione né strumenti di tracciamento di terze parti.</li>
+              <li><strong>Profilazione:</strong> nessuna. I dati non sono usati per decisioni automatizzate.</li>
+              <li><strong>Diritti dell'interessato:</strong> puoi esercitare in ogni momento i diritti di accesso, rettifica, cancellazione, limitazione, portabilità e opposizione, oltre a revocare il consenso, scrivendo a veritasproject@gmail.com.</li>
+              <li><strong>Reclamo:</strong> puoi presentare reclamo all'autorità di controllo (in Italia: Garante per la protezione dei dati personali, garanteprivacy.it).</li>
+            </ul>
+          </details>
+        </div>
+      </section>
+
+      <footer>
+        <p>© 2026 Veritas — Tutti i diritti riservati</p>
+        <p>Questa pagina non utilizza cookie né tracciamento. Le email si cancellano con un click.</p>
+      </footer>
+    </div>
+
+    <script>
+      // Demo lato client: finché non colleghi il servizio email, simula l'invio.
+      // Quando integri l'endpoint reale, questa funzione non serve più.
+      // Validazione email in tempo reale
+      var emailInput = document.getElementById("email");
+      var emailHint = document.getElementById("email-hint");
+      function emailValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+      function setEmailState(state, text) {
+        emailInput.classList.remove("ok", "err");
+        emailHint.className = "email-hint" + (state ? " " + state : "");
+        emailHint.textContent = text || "";
+      }
+      emailInput.addEventListener("input", function () {
+        var v = emailInput.value.trim();
+        if (v === "") { setEmailState("", ""); return; }
+        if (emailValid(v)) { setEmailState("ok", "✓ Email valida"); return; }
+        if (emailHint.classList.contains("err")) {
+          setEmailState("err", "Ancora non valida: servono una @ e un dominio, es. nome@esempio.it");
+        }
+      });
+      emailInput.addEventListener("blur", function () {
+        var v = emailInput.value.trim();
+        if (v === "") { setEmailState("", ""); return; }
+        if (!emailValid(v)) {
+          setEmailState("err", "L'indirizzo non sembra valido: serve un formato tipo nome@esempio.it");
+        } else {
+          setEmailState("ok", "✓ Email valida");
+        }
+      });
+
+      document.getElementById("signup-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var msg = document.getElementById("form-msg");
+        var email = document.getElementById("email");
+        var consent = document.getElementById("consent");
+        var honeypot = e.target.querySelector(".hp");
+        msg.className = "form-msg";
+
+        if (honeypot && honeypot.value !== "") { return; } // bot: ignora
+
+        if (!emailValid(email.value.trim())) {
+          msg.textContent = "⚠️ Controlla l'indirizzo email: non sembra valido.";
+          msg.classList.add("error");
+          setEmailState("err", "L'indirizzo non sembra valido: serve un formato tipo nome@esempio.it");
+          email.focus();
+          return;
+        }
+        if (!consent.checked) {
+          msg.textContent = "⚠️ Serve il tuo consenso per poter ti inviare gli aggiornamenti. Spunta la casella qui sopra.";
+          msg.classList.add("error");
+          consent.focus();
+          return;
+        }
+
+        // In produzione: e.preventDefault() non serve, il form invia al servizio email
+        msg.textContent = "✅ Ci siamo quasi! Controlla la tua casella di posta (anche lo spam) e clicca sul link di conferma per attivare gli aggiornamenti.";
+        msg.classList.add("ok");
+        email.value = "";
+        consent.checked = false;
+        setEmailState("", "");
+      });
+
+      // Link interni (#ancore): scroll morbido esplicito, che funziona sia in
+      // anteprima (iframe) sia sul sito pubblicato, senza navigazione di pagina.
+      document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          var target = document.getElementById(link.getAttribute("href").slice(1));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
