@@ -3,7 +3,7 @@ window.VERITAS_CONFIG = {
   // API del modello (backend/api.py).
   // Vuoto = modalità DEMO: il telefono usa risposte preregistrate, nessun server necessario.
   // In locale: "http://localhost:8000"  (oppure apri il sito con ?api=http://localhost:8000)
-  apiBaseUrl: "",
+  apiBaseUrl: "https://resolutions-lace-america-guam.trycloudflare.com",
   requestTimeoutMs: 60000,
   defaultK: 3,
   maxClaimChars: 300,
