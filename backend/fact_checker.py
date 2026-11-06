@@ -20,6 +20,12 @@ _TOKEN_PATTERN = re.compile(r"[A-Za-z0-9]+")
 _PERSONAL_CLAIM_PATTERN = re.compile(
     r"^(my|i)\s+(name|full name|birth name)\s+is\s+.+$", re.IGNORECASE
 )
+_ATTRIBUTION_CUE_PATTERN = re.compile(
+    r"\b(?:claim(?:s|ed)?|alleg(?:es|ed)|assert(?:s|ed)|argu(?:es|ed)|"
+    r"believ(?:es|ed)|say(?:s|id)|promot(?:es|ed)|report(?:s|ed))"
+    r"\b.{0,100}?\bthat\b",
+    re.IGNORECASE,
+)
 _STOP_WORDS = frozenset(
     {
         "a", "an", "the", "is", "are", "was", "were", "be", "been", "being",
@@ -92,7 +98,8 @@ class FactChecker:
     Use :meth:`from_pretrained` to load the delivery bundle. Predictions use
     the notebook's conservative rule: a SUPPORTS or REFUTES decision requires
     a sentence above the probability threshold and ahead of the opposing class
-    by the configured margin. Otherwise, the checker abstains.
+    by the configured margin. Attributed claims are not treated as factual
+    evidence. Otherwise, the checker abstains.
     """
 
     def __init__(
@@ -190,6 +197,19 @@ class FactChecker:
             for token in _TOKEN_PATTERN.findall(text)
             if token.lower() not in _STOP_WORDS and len(token) > 2
         }
+
+    @classmethod
+    def _is_attributed_claim_evidence(cls, claim: str, evidence_text: str) -> bool:
+        claim_tokens = cls._normalize_claim_tokens(claim)
+        if not claim_tokens:
+            return False
+
+        for match in _ATTRIBUTION_CUE_PATTERN.finditer(evidence_text):
+            attributed_tokens = cls._normalize_claim_tokens(evidence_text[match.end():])
+            overlap = len(claim_tokens & attributed_tokens) / len(claim_tokens)
+            if overlap >= 0.6:
+                return True
+        return False
 
     @classmethod
     def _evidence_relevance_score(cls, claim: str, evidence_text: str) -> float:
@@ -320,24 +340,41 @@ class FactChecker:
         supports_id = self._label_ids["SUPPORTS"]
         refutes_id = self._label_ids["REFUTES"]
         nei_id = self._label_ids["NOT ENOUGH INFO"]
-        max_support = max(row[supports_id] for row in evidence_probabilities)
-        max_refute = max(row[refutes_id] for row in evidence_probabilities)
-        support_strong = max_support >= selected_threshold
-        refute_strong = max_refute >= selected_threshold
+        decision_evidence = [
+            (text, probabilities)
+            for text, probabilities in zip(
+                evidence_texts, evidence_probabilities, strict=True
+            )
+            if not self._is_attributed_claim_evidence(claim, text)
+        ]
+        decision_texts = [text for text, _ in decision_evidence]
+        decision_probabilities = [probabilities for _, probabilities in decision_evidence]
 
         abstention_reason: str | None = None
-        if support_strong and refute_strong:
-            prediction_id = nei_id
-            abstention_reason = "Strong evidence supports both labels"
-        elif support_strong and max_support - max_refute >= selected_margin:
-            prediction_id = supports_id
-        elif refute_strong and max_refute - max_support >= selected_margin:
-            prediction_id = refutes_id
-        else:
+        if not decision_evidence:
             prediction_id = nei_id
             abstention_reason = (
-                "No sentence provided sufficiently strong directional evidence"
+                "Retrieved evidence reports this claim as someone else's assertion, "
+                "not as an established fact"
             )
+        else:
+            max_support = max(row[supports_id] for row in decision_probabilities)
+            max_refute = max(row[refutes_id] for row in decision_probabilities)
+            support_strong = max_support >= selected_threshold
+            refute_strong = max_refute >= selected_threshold
+
+            if support_strong and refute_strong:
+                prediction_id = nei_id
+                abstention_reason = "Strong evidence supports both labels"
+            elif support_strong and max_support - max_refute >= selected_margin:
+                prediction_id = supports_id
+            elif refute_strong and max_refute - max_support >= selected_margin:
+                prediction_id = refutes_id
+            else:
+                prediction_id = nei_id
+                abstention_reason = (
+                    "No sentence provided sufficiently strong directional evidence"
+                )
 
         evidence_used: list[str] = []
         if prediction_id in (supports_id, refutes_id):
@@ -345,20 +382,21 @@ class FactChecker:
             evidence_used = [
                 text
                 for text, probabilities in zip(
-                    evidence_texts, evidence_probabilities, strict=True
+                    decision_texts, decision_probabilities, strict=True
                 )
                 if probabilities[prediction_id] >= selected_threshold
                 and probabilities[prediction_id] - probabilities[opposite_id]
                 >= selected_margin
             ]
 
-        confidence = (
-            max_support
-            if prediction_id == supports_id
-            else max_refute
-            if prediction_id == refutes_id
-            else max(0.0, 1.0 - max(max_support, max_refute))
-        )
+        if not decision_evidence:
+            confidence = 0.0
+        elif prediction_id == supports_id:
+            confidence = max_support
+        elif prediction_id == refutes_id:
+            confidence = max_refute
+        else:
+            confidence = max(0.0, 1.0 - max(max_support, max_refute))
         return {
             "claim": claim,
             "predicted_label": self._label_names[prediction_id],
